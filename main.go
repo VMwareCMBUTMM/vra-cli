@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/VMwareCMBUTMM/vra-cli/cmd"
+import "vra-cli/cmd"
 
 func main() {
 	cmd.Execute()
