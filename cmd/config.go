@@ -139,7 +139,6 @@ func init() {
 	// get-target
 	configCmd.AddCommand(getConfigTargetCmd)
 	getConfigTargetCmd.Flags().StringVarP(&name, "name", "n", "", "Display the target with this name")
-	getConfigTargetCmd.MarkFlagRequired("name")
 	// set-target
 	configCmd.AddCommand(setTargetCmd)
 	setTargetCmd.Flags().StringVarP(&newTargetName, "name", "n", "", "Name of the target configuration")
