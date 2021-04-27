@@ -64,10 +64,10 @@ var deploymentResourceActionsCmd = &cobra.Command{
 		  fmt.Println(err)
 		  return
 		}
-		var action []Action
-	  json.Unmarshal([]byte(body), &action)
-	  for i := 0; i < len(action); i++ {
-	    var content = action[i].Name
+		var actions []Action
+	  json.Unmarshal([]byte(body), &actions)
+	  for i := 0; i < len(actions); i++ {
+	    var content = actions[i].Name
 			color.Green(content)
 	  }
 	},

@@ -194,6 +194,50 @@ func getDeploymentResourceIdByName(name, resource string) string {
 	return ""
 }
 
+func getDeploymentResourceActionIdByName(name, resource, action string) string {
+	server := viper.GetString("target."+currentTargetName+".server")
+  deployment_id := getDeploymentIdByName(name)
+	dep_res_id := getDeploymentResourceIdByName(name, resource)
+  url := "https://"+server+"/deployment/api/deployments/"+deployment_id+"/resources/"+dep_res_id+"/actions"
+  method := "GET"
+	var token = getToken()
+  client := &http.Client {
+  }
+  req, err := http.NewRequest(method, url, nil)
+
+  if err != nil {
+    fmt.Println(err)
+    return ("Failed")
+  }
+  req.Header.Add("Authorization", "Bearer " + token)
+  req.Header.Add("Content-Type", "application/json")
+
+  res, err := client.Do(req)
+  if err != nil {
+    fmt.Println(err)
+    return ("Failed")
+  }
+  defer res.Body.Close()
+
+  body, err := ioutil.ReadAll(res.Body)
+  if err != nil {
+    fmt.Println(err)
+    return ("Failed")
+  }
+	var actions []Action
+	json.Unmarshal([]byte(body), &actions)
+  for i := 0; i < len(actions); i++ {
+		var action_name = actions[i].Name
+		if action_name == action {
+			var action_id = actions[i].ID
+			return action_id
+		} else if i == (len(actions)-1) {
+			fmt.Println("Did not find deployment resource action: " + action)
+		}
+  }
+	return ""
+}
+
 type arrayFlags []string
 
 func (i *arrayFlags) String() string {

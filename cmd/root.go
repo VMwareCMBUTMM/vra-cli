@@ -46,6 +46,7 @@ var (
 	deployment  string
 	resource    string
 	action      string
+	actions     string
 	inputs      []string
 	typename    string
 	value       string
