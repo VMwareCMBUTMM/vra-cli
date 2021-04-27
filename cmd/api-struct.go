@@ -30,3 +30,12 @@ type Deployment struct {
   Name string `json:"name"`
 	ID   string `json:"id"`
 }
+
+type ResourceActions struct {
+  Action []Action
+}
+
+type Action struct {
+  Name string `json:"name"`
+	ID   string `json:"id"`
+}

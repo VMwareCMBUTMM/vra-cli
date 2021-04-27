@@ -44,6 +44,8 @@ var (
 	name        string
 	project     string
 	deployment  string
+	resource    string
+	action      string
 	inputs      []string
 	typename    string
 	value       string
