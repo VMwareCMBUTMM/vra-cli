@@ -57,7 +57,7 @@ For example: vra-cli deploy catalogItem -d deployment1 -n catalogitem1 -p projec
 								  "inputs": `+input_str+`,
 								  "projectId": "`+proj_id+`"
 								}`)
-
+								
 	  client := &http.Client {
 	  }
 
