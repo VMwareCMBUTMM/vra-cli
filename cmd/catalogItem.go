@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"io/ioutil"
+	"crypto/tls"
 )
 
 // catalogItemCmd represents the catalogItem command
@@ -57,9 +58,11 @@ For example: vra-cli deploy catalogItem -d deployment1 -n catalogitem1 -p projec
 								  "inputs": `+input_str+`,
 								  "projectId": "`+proj_id+`"
 								}`)
-								
-	  client := &http.Client {
-	  }
+
+		tr := &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		client := &http.Client {Transport: tr}
 
 	  req, err := http.NewRequest(method, url, payload)
 

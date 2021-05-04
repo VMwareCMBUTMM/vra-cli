@@ -23,13 +23,14 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/fatih/color"
 	"github.com/spf13/viper"
+	"crypto/tls"
 )
 
 // catalogItemsCmd represents the catalogItems command
 var deploymentsCmd = &cobra.Command{
 	Use:   "deployments",
-	Short: "Lists al deployments you are allowed to see.",
-	Long: `Lists al deployments you are allowed to see.
+	Short: "Lists all deployments you are allowed to see.",
+	Long: `Lists all deployments you are allowed to see.
 
 	For example: vra-cli list deploymentDetails -n deployment1`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -38,8 +39,10 @@ var deploymentsCmd = &cobra.Command{
 		method := "GET"
 		var token = getToken()
 
-		client := &http.Client {
+		tr := &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
+		client := &http.Client {Transport: tr}
 
 		req, err := http.NewRequest(method, url, nil)
 

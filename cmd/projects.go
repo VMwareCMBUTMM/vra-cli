@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/fatih/color"
 	"github.com/spf13/viper"
+	"crypto/tls"
 )
 
 // catalogItemsCmd represents the catalogItems command
@@ -43,8 +44,10 @@ func listProjects() {
   url := "https://"+server+"/iaas/api/projects"
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {

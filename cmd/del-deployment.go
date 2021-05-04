@@ -23,6 +23,7 @@ import (
 	"io/ioutil"
 	"github.com/tidwall/pretty"
 	"strings"
+	"crypto/tls"
 )
 
 // deploymentCmd represents the deployment command
@@ -46,8 +47,10 @@ var deldeploymentCmd = &cobra.Command{
 		              "targetId": "`+deployment_id+`"
 		            }`)
 
-		client := &http.Client {
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
+		client := &http.Client {Transport: tr}
 
 		req, err := http.NewRequest(method, url, payload)
 

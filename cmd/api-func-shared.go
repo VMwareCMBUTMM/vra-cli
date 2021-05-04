@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"github.com/spf13/viper"
 	"strings"
+	"crypto/tls"
 )
 
 func getToken() string {
@@ -36,9 +37,10 @@ func getToken() string {
   "username": "`+user+`",
   "password": "`+pass+`"
   }`)
-
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+  client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, payload)
 
   if err != nil {
@@ -71,8 +73,10 @@ func getProjectIdByName(name string) string {
   url := "https://"+server+"/iaas/api/projects"
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+  client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {
@@ -114,8 +118,10 @@ func getDeploymentIdByName(name string) string {
   url := "https://"+server+"/deployment/api/deployments"
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+  client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {
@@ -157,8 +163,10 @@ func getDeploymentResourceIdByName(name, resource string) string {
   url := "https://"+server+"/deployment/api/deployments/"+deployment_id+"/resources"
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+  client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {
@@ -201,8 +209,10 @@ func getDeploymentResourceActionIdByName(name, resource, action string) string {
   url := "https://"+server+"/deployment/api/deployments/"+deployment_id+"/resources/"+dep_res_id+"/actions"
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+  client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {

@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/Jeffail/gabs"
 	"github.com/tidwall/pretty"
+	"crypto/tls"
 )
 
 // catalogItemsCmd represents the catalogItems command
@@ -41,8 +42,10 @@ var deploymentResourceActionInputsCmd = &cobra.Command{
 		method := "GET"
 		var token = getToken()
 
-		client := &http.Client {
+		tr := &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
+		client := &http.Client {Transport: tr}
 
 		req, err := http.NewRequest(method, url, nil)
 

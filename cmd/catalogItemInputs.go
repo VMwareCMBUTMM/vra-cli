@@ -24,6 +24,7 @@ import (
 	"github.com/Jeffail/gabs"
 	"github.com/tidwall/pretty"
 	"github.com/spf13/viper"
+	"crypto/tls"
 )
 
 // catalogItemInputsCmd represents the catalogItemInputs command
@@ -45,8 +46,10 @@ func getCatalogItemIdByName(name string) string {
   url := "https://"+server+"/catalog/api/items"
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {
@@ -89,8 +92,10 @@ func getCatalogItemInputs(name string) {
   url := "https://"+server+"/catalog/api/items/" + cat_id
   method := "GET"
 	var token = getToken()
-  client := &http.Client {
-  }
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
 
   if err != nil {

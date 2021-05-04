@@ -124,7 +124,7 @@ Examples:
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Create configuration for vRalize Automation Access",
+	Short: "Create configuration for vRealize Automation Access",
 	Long: `Create a config for vRealize Automation which allows making calls to the vRealize Automation API`,
 }
 
