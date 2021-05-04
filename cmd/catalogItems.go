@@ -45,7 +45,7 @@ func listCatalogItems() {
   method := "GET"
 	var token = getToken()
 	tr := &http.Transport{
-        TLSClientConfig: &tls.Config{InsecureSkipVerify: false},
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
     }
   client := &http.Client {Transport: tr}
   req, err := http.NewRequest(method, url, nil)
