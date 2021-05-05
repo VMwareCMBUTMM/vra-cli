@@ -95,7 +95,10 @@ var setTargetCmd = &cobra.Command{
 	Long: `Creates or updates a target configuration.
 
 Examples:
+  (On-prem Example)
 	vra-cli config set-target --name vra-test-ga --server vra8-test-ga.local.com --username test-user --password VMware1! --domain domain.local
+	(vRA Cloud Example)
+	vra-cli config set-target --name vrac-org --server api.mgmt.cloud.vmware.com --apitoken JhbGciOiJSUzI1NiIsImtpZCI6IjEzNjY3NDcwMTA2Mzk2MTUxNDk0In0
 `, Args: func(cmd *cobra.Command, args []string) error {
 		return nil
 	},
