@@ -23,48 +23,74 @@ import (
 	"github.com/spf13/viper"
 	"strings"
 	"crypto/tls"
+	"github.com/go-resty/resty/v2"
+	log "github.com/sirupsen/logrus"
 )
 
 func getToken() string {
-	user := viper.GetString("target."+currentTargetName+".username")
-	pass := viper.GetString("target."+currentTargetName+".password")
-	server := viper.GetString("target."+currentTargetName+".server")
+	if viper.GetString("target."+currentTargetName+".apitoken") == "" {
+		user := viper.GetString("target."+currentTargetName+".username")
+		pass := viper.GetString("target."+currentTargetName+".password")
+		server := viper.GetString("target."+currentTargetName+".server")
+		domain := viper.GetString("target."+currentTargetName+".domain")
 
-  url := "https://"+server+"/csp/gateway/am/api/login"
-  method := "POST"
+	  url := "https://"+server+"/csp/gateway/am/api/login"
+	  method := "POST"
 
-  payload := strings.NewReader(`{
-  "username": "`+user+`",
-  "password": "`+pass+`"
-  }`)
-	tr := &http.Transport{
-        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-    }
-  client := &http.Client {Transport: tr}
-  req, err := http.NewRequest(method, url, payload)
+	  payload := strings.NewReader(`{
+	  "username": "`+user+`",
+	  "password": "`+pass+`",
+		"domain": "`+domain+`"
+	  }`)
+		tr := &http.Transport{
+	        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	    }
+	  client := &http.Client {Transport: tr}
+	  req, err := http.NewRequest(method, url, payload)
 
-  if err != nil {
-    fmt.Println(err)
-    return ("failed")
-  }
-  req.Header.Add("Content-Type", "application/json")
+	  if err != nil {
+	    fmt.Println(err)
+	    return ("failed")
+	  }
+	  req.Header.Add("Content-Type", "application/json")
 
-  res, err := client.Do(req)
-  if err != nil {
-    fmt.Println(err)
-    return ("failed")
-  }
-  defer res.Body.Close()
+	  res, err := client.Do(req)
+	  if err != nil {
+	    fmt.Println(err)
+	    return ("failed")
+	  }
+	  defer res.Body.Close()
 
-  body, err := ioutil.ReadAll(res.Body)
-  if err != nil {
-    fmt.Println(err)
-    return ("failed")
-  }
-  var token Token
-  json.Unmarshal([]byte(body), &token)
-  var access_token = token.Token
-  return access_token
+	  body, err := ioutil.ReadAll(res.Body)
+	  if err != nil {
+	    fmt.Println(err)
+	    return ("failed")
+	  }
+	  var token Token
+	  json.Unmarshal([]byte(body), &token)
+	  var access_token = token.Token
+	  return access_token
+
+	} else if viper.GetString("target."+currentTargetName+".apitoken") != "" {
+		vrac_token := viper.GetString("target."+currentTargetName+".apitoken")
+    server := viper.GetString("target."+currentTargetName+".server")
+		client := resty.New()
+		queryResponse, err := client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: ignoreCert}).R().
+			SetBody(AuthenticationRequestCloud{vrac_token}).
+			SetResult(&AuthenticationResponseCloud{}).
+			SetError(&AuthenticationError{}).
+			Post("https://" + server + "/iaas/api/login")
+		if err != nil {
+		  fmt.Println(err)
+		  return ("failed")
+		}
+		if queryResponse.IsError() {
+			log.Debugln("Authentication failed!", queryResponse.RawResponse)
+			return "Authentication failed!"
+		}
+		return queryResponse.Result().(*AuthenticationResponseCloud).Token
+		}
+	return ""
 }
 
 func getProjectIdByName(name string) string {

@@ -63,7 +63,8 @@ type config struct {
 	password    string
 	server      string
 	username    string
-	accesstoken string
+	apitoken    string
+	domain      string
 }
 
 // rootCmd represents the base command when called without any subcommands
@@ -132,7 +133,8 @@ func initConfig() {
 			server:      sanitize.URL(configuration.GetString("server")),
 			username:    configuration.GetString("username"),
 			password:    configuration.GetString("password"),
-			accesstoken: configuration.GetString("accesstoken"),
+			domain:      configuration.GetString("domain"),
+			apitoken:    configuration.GetString("apitoken"),
 		}
 	}
 }

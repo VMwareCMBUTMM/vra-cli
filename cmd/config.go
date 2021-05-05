@@ -84,6 +84,8 @@ var (
 	newServer     string
 	newUsername   string
 	newPassword   string
+	newDomain     string
+	newAPIToken   string
 )
 
 // setTargetCmd represents the set-target command
@@ -93,7 +95,7 @@ var setTargetCmd = &cobra.Command{
 	Long: `Creates or updates a target configuration.
 
 Examples:
-	vra-cli config set-target --name vra-test-ga --server vra8-test-ga.local.com --username test-user@local.com --password VMware1!
+	vra-cli config set-target --name vra-test-ga --server vra8-test-ga.local.com --username test-user --password VMware1! --domain domain.local
 `, Args: func(cmd *cobra.Command, args []string) error {
 		return nil
 	},
@@ -112,6 +114,12 @@ Examples:
 		}
 		if newPassword != "" {
 			viper.Set("target."+newTargetName+".password", newPassword)
+		}
+		if newDomain != "" {
+			viper.Set("target."+newTargetName+".domain", newDomain)
+		}
+		if newAPIToken != "" {
+			viper.Set("target."+newTargetName+".apitoken", newAPIToken)
 		}
 		viper.SetConfigType("yaml")
 		err := viper.SafeWriteConfig()
@@ -143,7 +151,9 @@ func init() {
 	configCmd.AddCommand(setTargetCmd)
 	setTargetCmd.Flags().StringVarP(&newTargetName, "name", "n", "", "Name of the target configuration")
 	setTargetCmd.Flags().StringVarP(&newServer, "server", "s", "", "Server FQDN of the vRealize Automation instance")
-	setTargetCmd.Flags().StringVarP(&newUsername, "username", "u", "", "Username to authenticate. Example: user@local.com")
+	setTargetCmd.Flags().StringVarP(&newUsername, "username", "u", "", "Username to authenticate.")
 	setTargetCmd.Flags().StringVarP(&newPassword, "password", "p", "", "Password to authenticate")
+	setTargetCmd.Flags().StringVarP(&newDomain, "domain", "d", "", "User domain (ex domain.local). <Optional>")
+	setTargetCmd.Flags().StringVarP(&newAPIToken, "apitoken", "a", "", "API token for vRealize Automation Cloud.")
 	setTargetCmd.MarkFlagRequired("name")
 }
